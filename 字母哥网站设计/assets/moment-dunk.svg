@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Moment poster - dunk (placeholder)">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6ee7ff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="#0b1222"/>
+  <rect x="60" y="60" width="1080" height="680" rx="34" fill="url(#g)" stroke="#ffffff" stroke-opacity="0.14"/>
+  <g font-family="Noto Sans SC, sans-serif">
+    <text x="110" y="170" fill="#eaf0ff" font-size="52" font-weight="900">强攻篮下</text>
+    <text x="110" y="230" fill="#a8b3d6" font-size="26">一步起速 · 强对抗终结（占位图）</text>
+  </g>
+  <path d="M820 250c-72 0-130 58-130 130 0 28 8 54 22 76-40 32-66 82-66 138 0 28 6 54 18 78h320c12-24 18-50 18-78 0-56-26-106-66-138 14-22 22-48 22-76 0-72-58-130-138-130z"
+    fill="#0f1a33" stroke="#ffffff" stroke-opacity="0.14" stroke-width="3"/>
+  <path d="M915 314l52-52" stroke="#fbbf24" stroke-width="10" stroke-linecap="round"/>
+  <path d="M964 262h92" stroke="#fbbf24" stroke-width="10" stroke-linecap="round"/>
+</svg>
+
+
