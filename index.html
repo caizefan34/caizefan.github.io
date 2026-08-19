@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zefan Cai · AI/RL Researcher</title>
+
+  <!-- Three.js 3D Background -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a1a;
+      color: #e0e0e0;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ===== 3D CANVAS ===== */
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a1a; }
+    ::-webkit-scrollbar-thumb { background: #00d2ff; border-radius: 3px; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10,10,26,0.6);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: 0.3s;
+    }
+    nav .logo {
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+      font-size: 20px;
+      color: #00d2ff;
+    }
+    nav .logo span { color: #fff; }
+    nav ul { list-style: none; display: flex; gap: 28px; align-items: center; }
+    nav ul li a {
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+      letter-spacing: 0.5px;
+    }
+    nav ul li a:hover { color: #00d2ff; }
+    nav .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 4px; }
+    nav .menu-toggle span { width: 24px; height: 2px; background: #fff; transition: 0.3s; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 24px 60px;
+      position: relative;
+    }
+    .hero h1 {
+      font-size: clamp(40px, 8vw, 80px);
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+    .hero h1 .highlight { background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .typing-wrap {
+      font-family: 'Fira Code', monospace;
+      font-size: clamp(16px, 2.5vw, 24px);
+      color: rgba(255,255,255,0.7);
+      min-height: 1.6em;
+      margin: 20px 0 32px;
+    }
+    .typing-wrap .cursor { display: inline-block; width: 2px; height: 1em; background: #00d2ff; margin-left: 2px; animation: blink 0.8s infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    .hero-badges { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 32px; }
+    .hero-badges a {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 13px;
+      transition: 0.3s;
+    }
+    .hero-badges a:hover { border-color: #00d2ff; color: #00d2ff; transform: translateY(-2px); }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.3);
+      font-size: 12px;
+      animation: bounce 2s infinite;
+    }
+    .scroll-indicator i { font-size: 18px; }
+    @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+    /* ===== SECTION ===== */
+    section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+    .section-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title .line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0,210,255,0.3), transparent);
+    }
+    .section-title i { color: #00d2ff; }
+
+    /* ===== PROJECT CARDS ===== */
+    .project-grid { display: grid; gap: 24px; }
+    .project-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 32px;
+      transition: 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+      opacity: 0;
+      transition: 0.4s;
+    }
+    .project-card:hover { transform: translateY(-4px); border-color: rgba(0,210,255,0.2); }
+    .project-card:hover::before { opacity: 1; }
+    .project-card .icon { font-size: 32px; margin-bottom: 12px; }
+    .project-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .project-card .desc { color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 16px; }
+    .project-card .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .project-card .tags span {
+      padding: 4px 12px;
+      border-radius: 100px;
+      background: rgba(0,210,255,0.08);
+      color: #00d2ff;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .project-card .stats { display: flex; gap: 24px; font-size: 13px; }
+    .project-card .stats div { display: flex; align-items: center; gap: 4px; color: rgba(255,255,255,0.5); }
+    .project-card .stats i { color: #00d2ff; }
+    .project-card .links { margin-top: 16px; display: flex; gap: 12px; }
+    .project-card .links a {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .project-card .links .primary {
+      background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+      color: #fff;
+    }
+    .project-card .links .primary:hover { transform: scale(1.04); }
+    .project-card .links .secondary {
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7);
+    }
+    .project-card .links .secondary:hover { border-color: #00d2ff; color: #00d2ff; }
+
+    /* ===== STATS ROW ===== */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .stat-card {
+      text-align: center;
+      padding: 24px 12px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 12px;
+      transition: 0.3s;
+    }
+    .stat-card:hover { border-color: rgba(0,210,255,0.15); }
+    .stat-card .num {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-card .label { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ===== RESEARCH PHILOSOPHY ===== */
+    .philosophy {
+      background: linear-gradient(135deg, rgba(0,210,255,0.04), rgba(58,123,213,0.04));
+      border: 1px solid rgba(0,210,255,0.1);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+    }
+    .philosophy blockquote {
+      font-size: 20px;
+      font-weight: 600;
+      color: #00d2ff;
+      margin-bottom: 16px;
+    }
+    .philosophy ul { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+    .philosophy ul li {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+    }
+    .philosophy ul li i { color: #00d2ff; margin-right: 6px; }
+
+    /* ===== TECH STACK ===== */
+    .tech-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .tech-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      font-size: 13px;
+      transition: 0.3s;
+    }
+    .tech-item:hover { border-color: #00d2ff; transform: translateY(-2px); }
+    .tech-item i { font-size: 20px; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 40px 24px;
+      color: rgba(255,255,255,0.3);
+      font-size: 13px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    footer .social { display: flex; justify-content: center; gap: 16px; margin-bottom: 16px; }
+    footer .social a {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    footer .social a:hover { border-color: #00d2ff; color: #00d2ff; transform: translateY(-3px); }
+    footer .github-icon { margin-bottom: 12px; }
+    footer .github-icon a {
+      color: rgba(255,255,255,0.3);
+      text-decoration: none;
+      font-family: 'Fira Code', monospace;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+    footer .github-icon a:hover { color: #00d2ff; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      nav { padding: 12px 20px; }
+      nav ul { display: none; position: absolute; top: 60px; left: 0; right: 0; background: rgba(10,10,26,0.95); flex-direction: column; padding: 20px; gap: 16px; border-bottom: 1px solid rgba(25
