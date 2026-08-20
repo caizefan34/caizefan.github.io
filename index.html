@@ -1,311 +1,449 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zefan Cai · AI/RL Researcher</title>
+  <title>Zefan Cai · AI / RL Researcher — Reproducible AI Research</title>
+  <meta name="description" content="Zefan Cai — AI & Reinforcement Learning researcher building reproducible benchmarks, 3D Gaussian Splatting optimization, and urban mobility AI.">
+  <meta name="keywords" content="AI, reinforcement learning, 3D graphics, reproducible research, machine learning, urban mobility, 3DGS">
+  <meta name="author" content="Zefan Cai">
+  <meta name="robots" content="index, follow">
 
-  <!-- Three.js 3D Background -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="Zefan Cai · AI / RL Researcher">
+  <meta property="og:description" content="AI & Reinforcement Learning researcher. Building reproducible benchmarks, 3DGS optimization, and urban mobility AI.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://caizefan34.github.io/">
+  <meta property="og:locale" content="en_US">
 
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Zefan Cai · AI / RL Researcher">
+  <meta name="twitter:description" content="AI & Reinforcement Learning researcher. Reproducible benchmarks & open-source AI.">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#0a0a1a">
+  <meta name="color-scheme" content="dark">
+
+  <!-- Preconnect for 3rd-party origins -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://kit.fontawesome.com" crossorigin>
+
+  <!-- DNS Prefetch -->
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Fira+Code:wght@400;600&display=swap" as="style">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style">
+
+  <!-- Stylesheets (non-blocking via preload) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet"></noscript>
+
+  <!-- Favicon (inline SVG) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>">
+
+  <!-- Critical CSS (inline, above-fold) -->
   <style>
-    /* ===== RESET & BASE ===== */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #0a0a1a;
-      color: #e0e0e0;
-      overflow-x: hidden;
-      line-height: 1.6;
-    }
-
-    /* ===== 3D CANVAS ===== */
-    #bg-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: -1;
-      pointer-events: none;
-    }
-
+    /* ===== RESET ===== */
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:80px}
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#0a0a1a;color:#e0e0e0;overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+    /* ===== SKIP LINK (a11y) ===== */
+    .skip-link{position:absolute;top:-100%;left:8px;z-index:999;padding:8px 16px;background:#00d2ff;color:#0a0a1a;border-radius:0 0 8px 8px;font-weight:600;text-decoration:none;transition:top .2s}
+    .skip-link:focus{top:0}
+    /* ===== 3D BG CANVAS ===== */
+    #bg-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;will-change:transform}
     /* ===== SCROLLBAR ===== */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0a0a1a; }
-    ::-webkit-scrollbar-thumb { background: #00d2ff; border-radius: 3px; }
-
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:#0a0a1a}
+    ::-webkit-scrollbar-thumb{background:#00d2ff;border-radius:3px}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
     /* ===== NAV ===== */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 16px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(10,10,26,0.6);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      transition: 0.3s;
-    }
-    nav .logo {
-      font-family: 'Fira Code', monospace;
-      font-weight: 600;
-      font-size: 20px;
-      color: #00d2ff;
-    }
-    nav .logo span { color: #fff; }
-    nav ul { list-style: none; display: flex; gap: 28px; align-items: center; }
-    nav ul li a {
-      color: rgba(255,255,255,0.6);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: 0.3s;
-      letter-spacing: 0.5px;
-    }
-    nav ul li a:hover { color: #00d2ff; }
-    nav .menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 4px; }
-    nav .menu-toggle span { width: 24px; height: 2px; background: #fff; transition: 0.3s; }
-
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(10,10,26,.7);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.04);transition:background .3s}
+    nav.scrolled{background:rgba(10,10,26,.92)}
+    nav .logo{font-family:'Fira Code',monospace;font-weight:600;font-size:clamp(16px,2vw,20px);color:#00d2ff;text-decoration:none}
+    nav .logo span{color:#fff}
+    nav ul{list-style:none;display:flex;gap:clamp(16px,3vw,28px);align-items:center}
+    nav ul li a{color:rgba(255,255,255,.6);text-decoration:none;font-size:14px;font-weight:500;transition:color .3s;letter-spacing:.5px}
+    nav ul li a:hover{color:#00d2ff}
+    nav ul li a:focus-visible{outline:2px solid #00d2ff;outline-offset:4px;border-radius:2px}
+    nav .menu-toggle{display:none;flex-direction:column;cursor:pointer;gap:4px;background:none;border:none;padding:4px}
+    nav .menu-toggle span{width:24px;height:2px;background:#fff;transition:transform .3s,opacity .3s;display:block}
+    nav .menu-toggle[aria-expanded="true"] span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
+    nav .menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+    nav .menu-toggle[aria-expanded="true"] span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
     /* ===== HERO ===== */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 100px 24px 60px;
-      position: relative;
-    }
-    .hero h1 {
-      font-size: clamp(40px, 8vw, 80px);
-      font-weight: 800;
-      letter-spacing: -1px;
-    }
-    .hero h1 .highlight { background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .typing-wrap {
-      font-family: 'Fira Code', monospace;
-      font-size: clamp(16px, 2.5vw, 24px);
-      color: rgba(255,255,255,0.7);
-      min-height: 1.6em;
-      margin: 20px 0 32px;
-    }
-    .typing-wrap .cursor { display: inline-block; width: 2px; height: 1em; background: #00d2ff; margin-left: 2px; animation: blink 0.8s infinite; }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-    .hero-badges { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 32px; }
-    .hero-badges a {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 8px 18px;
-      border-radius: 100px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      font-size: 13px;
-      transition: 0.3s;
-    }
-    .hero-badges a:hover { border-color: #00d2ff; color: #00d2ff; transform: translateY(-2px); }
-    .scroll-indicator {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      color: rgba(255,255,255,0.3);
-      font-size: 12px;
-      animation: bounce 2s infinite;
-    }
-    .scroll-indicator i { font-size: 18px; }
-    @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
-
+    .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 24px 60px;position:relative}
+    .hero h1{font-size:clamp(40px,8vw,80px);font-weight:800;letter-spacing:-1px;line-height:1.1}
+    .hero h1 .highlight{background:linear-gradient(135deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .typing-wrap{font-family:'Fira Code',monospace;font-size:clamp(16px,2.5vw,24px);color:rgba(255,255,255,.7);min-height:1.6em;margin:20px 0 32px}
+    .typing-wrap .cursor{display:inline-block;width:2px;height:1em;background:#00d2ff;margin-left:2px;animation:blink .8s step-end infinite;vertical-align:text-bottom}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+    .hero-badges{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:32px}
+    .hero-badges a{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:100px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.7);text-decoration:none;font-size:13px;transition:border-color .3s,color .3s,transform .3s}
+    .hero-badges a:hover{border-color:#00d2ff;color:#00d2ff;transform:translateY(-2px)}
+    .hero-badges a:focus-visible{outline:2px solid #00d2ff;outline-offset:2px}
+    .scroll-indicator{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.3);font-size:12px;animation:bounce 2s ease-in-out infinite;transition:opacity .5s}
+    .scroll-indicator.hidden{opacity:0;pointer-events:none}
+    .scroll-indicator i{font-size:18px}
+    @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
     /* ===== SECTION ===== */
-    section {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 80px 24px;
-    }
-    .section-title {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 48px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .section-title .line {
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(0,210,255,0.3), transparent);
-    }
-    .section-title i { color: #00d2ff; }
-
+    section{max-width:1000px;margin:0 auto;padding:80px 24px}
+    .section-title{font-size:28px;font-weight:700;margin-bottom:48px;display:flex;align-items:center;gap:12px}
+    .section-title .line{flex:1;height:1px;background:linear-gradient(90deg,rgba(0,210,255,.3),transparent)}
+    .section-title i{color:#00d2ff}
     /* ===== PROJECT CARDS ===== */
-    .project-grid { display: grid; gap: 24px; }
-    .project-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 16px;
-      padding: 32px;
-      transition: 0.4s;
-      position: relative;
-      overflow: hidden;
-    }
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 3px;
-      background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-      opacity: 0;
-      transition: 0.4s;
-    }
-    .project-card:hover { transform: translateY(-4px); border-color: rgba(0,210,255,0.2); }
-    .project-card:hover::before { opacity: 1; }
-    .project-card .icon { font-size: 32px; margin-bottom: 12px; }
-    .project-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-    .project-card .desc { color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 16px; }
-    .project-card .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-    .project-card .tags span {
-      padding: 4px 12px;
-      border-radius: 100px;
-      background: rgba(0,210,255,0.08);
-      color: #00d2ff;
-      font-size: 12px;
-      font-weight: 500;
-    }
-    .project-card .stats { display: flex; gap: 24px; font-size: 13px; }
-    .project-card .stats div { display: flex; align-items: center; gap: 4px; color: rgba(255,255,255,0.5); }
-    .project-card .stats i { color: #00d2ff; }
-    .project-card .links { margin-top: 16px; display: flex; gap: 12px; }
-    .project-card .links a {
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-    .project-card .links .primary {
-      background: linear-gradient(135deg, #00d2ff, #3a7bd5);
-      color: #fff;
-    }
-    .project-card .links .primary:hover { transform: scale(1.04); }
-    .project-card .links .secondary {
-      border: 1px solid rgba(255,255,255,0.15);
-      color: rgba(255,255,255,0.7);
-    }
-    .project-card .links .secondary:hover { border-color: #00d2ff; color: #00d2ff; }
-
+    .project-grid{display:grid;gap:24px}
+    .project-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:32px;transition:transform .4s,border-color .4s;position:relative;overflow:hidden}
+    .project-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,#00d2ff,#3a7bd5);opacity:0;transition:opacity .4s}
+    .project-card:focus-within{transform:translateY(-4px);border-color:rgba(0,210,255,.2)}
+    .project-card:focus-within::before{opacity:1}
+    @media(hover:hover){.project-card:hover{transform:translateY(-4px);border-color:rgba(0,210,255,.2)}.project-card:hover::before{opacity:1}}
+    .project-card .icon{font-size:32px;margin-bottom:12px;display:block}
+    .project-card h3{font-size:20px;font-weight:700;margin-bottom:8px}
+    .project-card .desc{color:rgba(255,255,255,.6);font-size:14px;margin-bottom:16px;line-height:1.5}
+    .project-card .tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+    .project-card .tags span{padding:4px 12px;border-radius:100px;background:rgba(0,210,255,.08);color:#00d2ff;font-size:12px;font-weight:500}
+    .project-card .stats{display:flex;gap:24px;font-size:13px;flex-wrap:wrap}
+    .project-card .stats div{display:flex;align-items:center;gap:4px;color:rgba(255,255,255,.5)}
+    .project-card .stats i{color:#00d2ff}
+    .project-card .links{margin-top:16px;display:flex;gap:12px;flex-wrap:wrap}
+    .project-card .links a{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;transition:transform .3s,background .3s,border-color .3s}
+    .project-card .links .primary{background:linear-gradient(135deg,#00d2ff,#3a7bd5);color:#fff}
+    .project-card .links .primary:hover{transform:scale(1.04)}
+    .project-card .links .secondary{border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7)}
+    .project-card .links .secondary:hover{border-color:#00d2ff;color:#00d2ff}
+    .project-card .links a:focus-visible{outline:2px solid #00d2ff;outline-offset:2px}
     /* ===== STATS ROW ===== */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 16px;
-      margin-bottom: 48px;
-    }
-    .stat-card {
-      text-align: center;
-      padding: 24px 12px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.04);
-      border-radius: 12px;
-      transition: 0.3s;
-    }
-    .stat-card:hover { border-color: rgba(0,210,255,0.15); }
-    .stat-card .num {
-      font-size: 32px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #00d2ff, #3a7bd5);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .stat-card .label { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
-
-    /* ===== RESEARCH PHILOSOPHY ===== */
-    .philosophy {
-      background: linear-gradient(135deg, rgba(0,210,255,0.04), rgba(58,123,213,0.04));
-      border: 1px solid rgba(0,210,255,0.1);
-      border-radius: 16px;
-      padding: 40px;
-      text-align: center;
-    }
-    .philosophy blockquote {
-      font-size: 20px;
-      font-weight: 600;
-      color: #00d2ff;
-      margin-bottom: 16px;
-    }
-    .philosophy ul { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
-    .philosophy ul li {
-      padding: 8px 16px;
-      background: rgba(255,255,255,0.04);
-      border-radius: 8px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.6);
-    }
-    .philosophy ul li i { color: #00d2ff; margin-right: 6px; }
-
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:48px}
+    .stat-card{text-align:center;padding:24px 12px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:12px;transition:border-color .3s}
+    .stat-card:hover{border-color:rgba(0,210,255,.15)}
+    .stat-card .num{font-size:32px;font-weight:800;background:linear-gradient(135deg,#00d2ff,#3a7bd5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .stat-card .label{font-size:12px;color:rgba(255,255,255,.4);margin-top:4px;text-transform:uppercase;letter-spacing:1px}
+    /* ===== PHILOSOPHY ===== */
+    .philosophy{background:linear-gradient(135deg,rgba(0,210,255,.04),rgba(58,123,213,.04));border:1px solid rgba(0,210,255,.1);border-radius:16px;padding:40px;text-align:center}
+    .philosophy blockquote{font-size:20px;font-weight:600;color:#00d2ff;margin-bottom:16px}
+    .philosophy ul{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+    .philosophy ul li{padding:8px 16px;background:rgba(255,255,255,.04);border-radius:8px;font-size:13px;color:rgba(255,255,255,.6)}
+    .philosophy ul li i{color:#00d2ff;margin-right:6px}
     /* ===== TECH STACK ===== */
-    .tech-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-    }
-    .tech-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
-      font-size: 13px;
-      transition: 0.3s;
-    }
-    .tech-item:hover { border-color: #00d2ff; transform: translateY(-2px); }
-    .tech-item i { font-size: 20px; }
-
+    .tech-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+    .tech-item{display:flex;align-items:center;gap:8px;padding:10px 18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;font-size:13px;transition:border-color .3s,transform .3s}
+    .tech-item:hover{border-color:#00d2ff;transform:translateY(-2px)}
+    .tech-item i{font-size:20px}
     /* ===== FOOTER ===== */
-    footer {
-      text-align: center;
-      padding: 40px 24px;
-      color: rgba(255,255,255,0.3);
-      font-size: 13px;
-      border-top: 1px solid rgba(255,255,255,0.04);
-    }
-    footer .social { display: flex; justify-content: center; gap: 16px; margin-bottom: 16px; }
-    footer .social a {
-      width: 40px; height: 40px;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: rgba(255,255,255,0.5);
-      text-decoration: none;
-      transition: 0.3s;
-    }
-    footer .social a:hover { border-color: #00d2ff; color: #00d2ff; transform: translateY(-3px); }
-    footer .github-icon { margin-bottom: 12px; }
-    footer .github-icon a {
-      color: rgba(255,255,255,0.3);
-      text-decoration: none;
-      font-family: 'Fira Code', monospace;
-      font-size: 14px;
-      transition: 0.3s;
-    }
-    footer .github-icon a:hover { color: #00d2ff; }
-
+    footer{text-align:center;padding:40px 24px;color:rgba(255,255,255,.3);font-size:13px;border-top:1px solid rgba(255,255,255,.04)}
+    footer .social{display:flex;justify-content:center;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+    footer .social a{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.5);text-decoration:none;transition:border-color .3s,color .3s,transform .3s}
+    footer .social a:hover{border-color:#00d2ff;color:#00d2ff;transform:translateY(-3px)}
+    footer .social a:focus-visible{outline:2px solid #00d2ff;outline-offset:2px}
+    footer .github-icon{margin-bottom:12px}
+    footer .github-icon a{color:rgba(255,255,255,.3);text-decoration:none;font-family:'Fira Code',monospace;font-size:14px;transition:color .3s}
+    footer .github-icon a:hover{color:#00d2ff}
     /* ===== RESPONSIVE ===== */
-    @media (max-width: 640px) {
-      nav { padding: 12px 20px; }
-      nav ul { display: none; position: absolute; top: 60px; left: 0; right: 0; background: rgba(10,10,26,0.95); flex-direction: column; padding: 20px; gap: 16px; border-bottom: 1px solid rgba(25
+    @media(max-width:768px){section{padding:60px 20px}.project-card{padding:24px}.philosophy{padding:28px 20px}}
+    @media(max-width:640px){nav{padding:12px 20px}nav ul{display:none;position:absolute;top:60px;left:0;right:0;background:rgba(10,10,26,.97);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);flex-direction:column;padding:20px;gap:16px;border-bottom:1px solid rgba(255,255,255,.08);z-index:99}nav ul.open{display:flex}nav .menu-toggle{display:flex}.stats-row{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+  <!-- Skip-to-content link (a11y) -->
+  <a href="#about" class="skip-link">Skip to content</a>
+
+  <!-- 3D Background Canvas (three.js) -->
+  <canvas id="bg-canvas" role="presentation" aria-hidden="true"></canvas>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav role="navigation" aria-label="Main navigation">
+    <a href="#" class="logo" aria-label="Zefan Cai home">zc<span>_</span></a>
+    <button class="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" id="menu-toggle">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="nav-menu">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#philosophy">Philosophy</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero" role="banner">
+    <h1><span class="highlight">Zefan Cai</span></h1>
+    <div class="typing-wrap" role="status" aria-live="polite" id="typing-text">AI | Reinforcement Learning | 3D Graphics<span class="cursor" aria-hidden="true"></span></div>
+    <div class="hero-badges">
+      <a href="https://github.com/caizefan34" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
+      <a href="mailto:caizefan34@gmail.com" aria-label="Send email"><i class="fas fa-envelope" aria-hidden="true"></i> Email</a>
+      <a href="https://caizefan34.github.io/urban-mobility-ai/" target="_blank" rel="noopener noreferrer" aria-label="Urban Mobility AI demo"><i class="fas fa-robot" aria-hidden="true"></i> Urban Mobility AI</a>
+    </div>
+    <div class="scroll-indicator" aria-hidden="true" id="scroll-indicator">
+      <span>Scroll</span>
+      <i class="fas fa-chevron-down" aria-hidden="true"></i>
+    </div>
+  </header>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" aria-label="About me">
+    <h2 class="section-title"><i class="fas fa-user" aria-hidden="true"></i> About <span class="line"></span></h2>
+    <p style="font-size:16px;color:rgba(255,255,255,.65);margin-bottom:24px;max-width:720px;line-height:1.8">
+      I'm a <strong>university student & open-source researcher</strong> at the intersection of <strong>AI, Reinforcement Learning, and 3D Computer Graphics</strong>. I build research-grade benchmarks with honest, reproducible evaluation — strict train/test splits, checked-in reference metrics, and transparent limitations.
+    </p>
+    <p style="font-size:16px;color:rgba(255,255,255,.65);max-width:720px;line-height:1.8">
+      Currently exploring <strong>3D Gaussian Splatting (3DGS)</strong> optimization, <strong>urban mobility AI</strong>, and advocating for reproducible AI research. I believe in rigorous experimentation over hype-driven claims.
+    </p>
+  </section>
+
+  <!-- ===== STATS ===== -->
+  <section aria-label="GitHub statistics">
+    <div class="stats-row">
+      <div class="stat-card"><div class="num">15+</div><div class="label">Repos</div></div>
+      <div class="stat-card"><div class="num">402+</div><div class="label">Passing Tests</div></div>
+      <div class="stat-card"><div class="num">3</div><div class="label">Featured Projects</div></div>
+      <div class="stat-card"><div class="num">RL</div><div class="label">Focus Area</div></div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section id="projects" aria-label="Featured projects">
+    <h2 class="section-title"><i class="fas fa-code-branch" aria-hidden="true"></i> Projects <span class="line"></span></h2>
+    <div class="project-grid">
+
+      <!-- Urban Mobility AI -->
+      <article class="project-card">
+        <span class="icon" aria-hidden="true">🚕</span>
+        <h3>Urban Mobility AI</h3>
+        <p class="desc">AI-driven taxi fleet repositioning on 263 NYC zones — demand forecasting, multi-agent simulation, offline RL &amp; reproducible OPE.</p>
+        <div class="tags">
+          <span>Python</span><span>RL</span><span>LightGBM</span><span>PyTorch</span>
+        </div>
+        <div class="stats">
+          <div><i class="fas fa-check-circle" aria-hidden="true"></i> 402 tests</div>
+          <div><i class="fas fa-star" aria-hidden="true"></i> NDCG@3 0.9565</div>
+          <div><i class="fas fa-chart-line" aria-hidden="true"></i> +$54/driver lift</div>
+        </div>
+        <div class="links">
+          <a href="https://github.com/caizefan34/urban-mobility-ai" class="primary" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> Repo</a>
+          <a href="https://caizefan34.github.io/urban-mobility-ai/" class="secondary" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Live Demo</a>
+        </div>
+      </article>
+
+      <!-- 3DGS Renderer Benchmark -->
+      <article class="project-card">
+        <span class="icon" aria-hidden="true">🎨</span>
+        <h3>3DGS Renderer Benchmark</h3>
+        <p class="desc">Which 3DGS renderer is fastest? Which compression is best? Measured on the same GPU, same scenes, same protocol — 12 renderer variants across 5 scenes.</p>
+        <div class="tags">
+          <span>C++</span><span>CUDA</span><span>3DGS</span><span>Benchmark</span>
+        </div>
+        <div class="stats">
+          <div><i class="fas fa-microchip" aria-hidden="true"></i> 12 variants</div>
+          <div><i class="fas fa-cubes" aria-hidden="true"></i> 5 scenes</div>
+          <div><i class="fas fa-chart-bar" aria-hidden="true"></i> Pareto analysis</div>
+        </div>
+        <div class="links">
+          <a href="https://github.com/caizefan34/3dgs-renderer-benchmark" class="primary" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> Repo</a>
+          <a href="https://caizefan34.github.io/3dgs-renderer-benchmark/" class="secondary" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Results</a>
+        </div>
+      </article>
+
+      <!-- Local AI Stack -->
+      <article class="project-card">
+        <span class="icon" aria-hidden="true">🤖</span>
+        <h3>Local AI Stack</h3>
+        <p class="desc">A private, local AI workspace for RAG, knowledge bases, coding help, and LoRA fine-tuning — Docker Compose, one-command deployment.</p>
+        <div class="tags">
+          <span>Ollama</span><span>FastGPT</span><span>pgvector</span><span>Docker</span>
+        </div>
+        <div class="stats">
+          <div><i class="fas fa-layer-group" aria-hidden="true"></i> Full RAG pipeline</div>
+          <div><i class="fas fa-download" aria-hidden="true"></i> LoRA fine-tuning</div>
+          <div><i class="fas fa-ship" aria-hidden="true"></i> One-command deploy</div>
+        </div>
+        <div class="links">
+          <a href="https://github.com/caizefan34/local-ai-stack" class="primary" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> Repo</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ===== TECH STACK ===== -->
+  <section id="stack" aria-label="Technology stack">
+    <h2 class="section-title"><i class="fas fa-cogs" aria-hidden="true"></i> Stack <span class="line"></span></h2>
+    <div class="tech-grid">
+      <span class="tech-item"><i class="fab fa-python" aria-hidden="true" style="color:#3776AB"></i> Python</span>
+      <span class="tech-item"><i class="fas fa-code" aria-hidden="true" style="color:#00599C"></i> C++</span>
+      <span class="tech-item"><i class="fab fa-js" aria-hidden="true" style="color:#3178C6"></i> TypeScript</span>
+      <span class="tech-item"><i class="fas fa-fire" aria-hidden="true" style="color:#EE4C2C"></i> PyTorch</span>
+      <span class="tech-item"><span style="font-weight:700;color:#00A65A">L</span> LightGBM</span>
+      <span class="tech-item"><i class="fas fa-brain" aria-hidden="true" style="color:#F7931E"></i> scikit-learn</span>
+      <span class="tech-item"><i class="fas fa-robot" aria-hidden="true"></i> Stable-Baselines3</span>
+      <span class="tech-item"><span style="font-weight:700;color:#0072C6">P</span> Polars</span>
+      <span class="tech-item"><i class="fab fa-docker" aria-hidden="true" style="color:#2496ED"></i> Docker</span>
+      <span class="tech-item"><i class="fab fa-github" aria-hidden="true" style="color:#2088FF"></i> GitHub Actions</span>
+      <span class="tech-item"><i class="fas fa-bolt" aria-hidden="true" style="color:#009688"></i> FastAPI</span>
+    </div>
+  </section>
+
+  <!-- ===== PHILOSOPHY ===== -->
+  <section id="philosophy" aria-label="Research philosophy">
+    <h2 class="section-title"><i class="fas fa-flask" aria-hidden="true"></i> Philosophy <span class="line"></span></h2>
+    <div class="philosophy">
+      <blockquote>"Reproducibility is not optional."</blockquote>
+      <ul>
+        <li><i class="fas fa-check" aria-hidden="true"></i> Checked-in reference metrics</li>
+        <li><i class="fas fa-check" aria-hidden="true"></i> Strict temporal / leakage-safe splits</li>
+        <li><i class="fas fa-check" aria-hidden="true"></i> Honest negative results</li>
+        <li><i class="fas fa-check" aria-hidden="true"></i> Paired statistical tests</li>
+        <li><i class="fas fa-check" aria-hidden="true"></i> Transparent documentation</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer role="contentinfo">
+    <div class="github-icon">
+      <a href="https://github.com/caizefan34" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-github" aria-hidden="true"></i> @caizefan34
+      </a>
+    </div>
+    <div class="social">
+      <a href="https://github.com/caizefan34" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+      <a href="mailto:caizefan34@gmail.com" aria-label="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+      <a href="https://caizefan34.github.io/urban-mobility-ai/" target="_blank" rel="noopener noreferrer" aria-label="Urban Mobility AI demo"><i class="fas fa-robot" aria-hidden="true"></i></a>
+    </div>
+    <p>&copy; 2025 Zefan Cai. Built with rigor. Measured with honesty. Shared with purpose.</p>
+  </footer>
+
+  <!-- Deferred Three.js (non-blocking) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+
+  <!-- Main script (deferred) -->
+  <script defer>
+    /* ===== Three.js 3D Background ===== */
+    (function initBg() {
+      var canvas = document.getElementById('bg-canvas');
+      if (!canvas || typeof THREE === 'undefined') return;
+
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 30;
+
+      var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Stars
+      var starsGeometry = new THREE.BufferGeometry();
+      var starsCount = 1500;
+      var positions = new Float32Array(starsCount * 3);
+      for (var i = 0; i < starsCount * 3; i++) { positions[i] = (Math.random() - 0.5) * 200; }
+      starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      var starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.15, transparent: true, opacity: 0.8 });
+      var stars = new THREE.Points(starsGeometry, starsMaterial);
+      scene.add(stars);
+
+      // Floating particles
+      var particleCount = 300;
+      var particleGeo = new THREE.BufferGeometry();
+      var particlePos = new Float32Array(particleCount * 3);
+      var particleColors = new Float32Array(particleCount * 3);
+      for (var i = 0; i < particleCount; i++) {
+        particlePos[i*3] = (Math.random() - 0.5) * 100;
+        particlePos[i*3+1] = (Math.random() - 0.5) * 100;
+        particlePos[i*3+2] = (Math.random() - 0.5) * 100;
+        particleColors[i*3] = 0;     // R
+        particleColors[i*3+1] = 0.82; // G (#00d2ff ~ 0.82)
+        particleColors[i*3+2] = 1;     // B
+      }
+      particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+      particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+      var particleMat = new THREE.PointsMaterial({ size: 0.08, vertexColors: true, transparent: true, opacity: 0.6 });
+      var particles = new THREE.Points(particleGeo, particleMat);
+      scene.add(particles);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        stars.rotation.y += 0.00015;
+        particles.rotation.x += 0.0001;
+        particles.rotation.y += 0.0002;
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // Resize handler
+      var resizeTimeout;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }, 100);
+      });
+    })();
+
+    /* ===== Scroll indicator hide ===== */
+    (function scrollIndicator() {
+      var indicator = document.getElementById('scroll-indicator');
+      if (!indicator) return;
+      var onScroll = function() {
+        if (window.scrollY > 100) { indicator.classList.add('hidden'); }
+        else { indicator.classList.remove('hidden'); }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })();
+
+    /* ===== Mobile menu ===== */
+    (function mobileMenu() {
+      var toggle = document.getElementById('menu-toggle');
+      var menu = document.getElementById('nav-menu');
+      if (!toggle || !menu) return;
+
+      toggle.addEventListener('click', function() {
+        var expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', !expanded);
+        menu.classList.toggle('open');
+      });
+
+      // Close menu on link click
+      menu.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          toggle.setAttribute('aria-expanded', 'false');
+          menu.classList.remove('open');
+        });
+      });
+    })();
+
+    /* ===== Nav background on scroll ===== */
+    (function navScroll() {
+      var nav = document.querySelector('nav');
+      if (!nav) return;
+      window.addEventListener('scroll', function() {
+        nav.classList.toggle('scrolled', window.scrollY > 50);
+      }, { passive: true });
+    })();
+
+    /* ===== Intersection Observer for scroll-indicator ===== */
+    // Already handled by scroll event above
+  </script>
+
+  <!-- Stat counter: register view (lightweight) -->
+  <script defer>
+    (function beacon() {
+      // Simple page view beacon via GitHub Pages logs
+      if (navigator.sendBeacon) {
+        try {
+          navigator.sendBeacon(window.location.href + '?pv=' + Date.now());
+        } catch(e) {}
+      }
+    })();
+  </script>
+</body>
+</html>

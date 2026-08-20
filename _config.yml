@@ -1,0 +1,17 @@
+# GitHub Pages configuration
+title: Zefan Cai · AI / RL Researcher
+description: AI & Reinforcement Learning researcher building reproducible benchmarks, 3D Gaussian Splatting optimization, and urban mobility AI.
+url: https://caizefan34.github.io
+author: Zefan Cai
+
+# GitHub Pages settings
+lsi: false
+safe: true
+source: .
+incremental: false
+highlighter: none
+gist:
+  noscript: false
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge

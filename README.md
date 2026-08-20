@@ -1,18 +1,17 @@
-
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00c6ff,100:0072ff&height=200&section=header&text=Zefan%20Cai&fontSize=60&fontColor=ffffff&animation=fadeIn" width="100%" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00c6ff,100:0072ff&height=200&section=header&text=Zefan%20Cai&fontSize=60&fontColor=ffffff&animation=fadeIn" width="100%" alt="Zefan Cai header wave" />
 </div>
 
 <h1 align="center">
-  <img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&pause=1000&color=00D2FF&center=true&vCenter=true&width=600&lines=AI+%7C+Reinforcement+Learning+%7C+3D+Graphics;Building+Research-Grade+Benchmarks" />
+  <img src="https://readme-typing-svg.herokuapp.com/?font=Fira+Code&pause=1000&color=00D2FF&center=true&vCenter=true&width=600&lines=AI+%7C+Reinforcement+Learning+%7C+3D+Graphics;Building+Research-Grade+Benchmarks" alt="Typing SVG tagline" />
 </h1>
 
 <div align="center">
   
   [![GitHub followers](https://img.shields.io/github/followers/caizefan34?style=social)](https://github.com/caizefan34)
-  [![Website](https://img.shields.io/badge/Demo-Portfolio-%2300d2ff.svg?&style=flat-square&logo=google-chrome&logoColor=white)](https://caizefan34.github.io/urban-mobility-ai/)
+  [![Website](https://img.shields.io/badge/Demo-Portfolio-%2300d2ff.svg?style=flat-square&logo=google-chrome&logoColor=white)](https://caizefan34.github.io/urban-mobility-ai/)
   [![Email](https://img.shields.io/badge/Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:caizefan34@gmail.com)
-  [![Portfolio](https://img.shields.io/badge/Portfolio-%2300d2ff.svg?&style=flat-square&logo=google-chrome&logoColor=white)](https://caizefan34.github.io/caizefan34/)
+  [![Portfolio](https://img.shields.io/badge/Portfolio-%2300d2ff.svg?style=flat-square&logo=google-chrome&logoColor=white)](https://caizefan34.github.io/)
   
 </div>
 
@@ -101,10 +100,10 @@ I'm a **university student & open-source researcher** passionate at the intersec
 ## 📊 GitHub Stats
 
 <div align="center">
-  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=caizefan34&show_icons=true&theme=transparent&hide_border=true&count_private=true&include_all_commits=true&title_color=00d2ff&text_color=ffffff" />
-  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=caizefan34&layout=compact&theme=transparent&hide_border=true&title_color=00d2ff&text_color=ffffff" />
+  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=caizefan34&show_icons=true&theme=transparent&hide_border=true&count_private=true&include_all_commits=true&title_color=00d2ff&text_color=ffffff" alt="GitHub stats" />
+  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=caizefan34&layout=compact&theme=transparent&hide_border=true&title_color=00d2ff&text_color=ffffff" alt="Top languages" />
   <br/>
-  <img src="https://github-profile-trophy.vercel.app/?username=caizefan34&theme=flat&no-frame=true&row=1&column=6" alt="trophies" />
+  <img src="https://github-profile-trophy.vercel.app/?username=caizefan34&theme=flat&no-frame=true&row=1&column=6" alt="GitHub trophies" />
 </div>
 
 ---
@@ -112,7 +111,7 @@ I'm a **university student & open-source researcher** passionate at the intersec
 ## 📈 Contribution Activity
 
 <div align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=caizefan34&theme=react-dark&hide_border=true&area=true" width="95%" />
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=caizefan34&theme=react-dark&hide_border=true&area=true" width="95%" alt="Contribution graph" />
 </div>
 
 ---
@@ -133,13 +132,13 @@ Every benchmark in my repositories includes:
 <div align="center">
   <p>
     <a href="https://github.com/caizefan34/urban-mobility-ai">
-      <img src="https://github-readme-stats.vercel.app/api/pin/?username=caizefan34&repo=urban-mobility-ai&theme=transparent&hide_border=true" />
+      <img src="https://github-readme-stats.vercel.app/api/pin/?username=caizefan34&repo=urban-mobility-ai&theme=transparent&hide_border=true" alt="Urban Mobility AI pinned repo" />
     </a>
     <a href="https://github.com/caizefan34/3dgs-renderer-benchmark">
-      <img src="https://github-readme-stats.vercel.app/api/pin/?username=caizefan34&repo=3dgs-renderer-benchmark&theme=transparent&hide_border=true" />
+      <img src="https://github-readme-stats.vercel.app/api/pin/?username=caizefan34&repo=3dgs-renderer-benchmark&theme=transparent&hide_border=true" alt="3DGS Renderer Benchmark pinned repo" />
     </a>
     <a href="https://github.com/caizefan34/local-ai-stack">
-      <img src="https://github-readme-stats.vercel.app/api/pin/?username=caizefan34&repo=local-ai-stack&theme=transparent&hide_border=true" />
+      <img src="https://github-readme-stats.vercel.app/api/pin/?username=caizefan34&repo=local-ai-stack&theme=transparent&hide_border=true" alt="Local AI Stack pinned repo" />
     </a>
   </p>
   
